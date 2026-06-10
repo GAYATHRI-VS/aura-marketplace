@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Sustainable Fashion Marketplace</title>
+    <style>
+        /* Modern Reset & CSS Variables */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --primary: #1e3322;
+            --primary-light: #2d4d34;
+            --accent: #d4af37; /* Subtle Gold */
+            --bg-cream: #fbf9f6;
+            --text-dark: #1a1a1a;
+            --text-muted: #5a5a5a;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed Premium Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(251, 249, 246, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary);
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 4px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after, 
+        .nav-links li.active a::after {
+            width: 100%;
+        }
+
+        .nav-links li.active a {
+            color: var(--primary);
+        }
+
+        /* Dynamic Main Content Wrapper */
+        main {
+            flex: 1;
+            margin-top: 85px; /* Offset for fixed header */
+            position: relative;
+            min-height: calc(100vh - 85px);
+        }
+
+        /* Strict View Mechanism: Hide sections completely by default */
+        section {
+            display: none; 
+            opacity: 0;
+            transform: translateY(20px);
+            padding: 60px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        /* Active State handled by JS */
+        section.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Global Typography for Sections */
+        .section-title {
+            font-size: 42px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+        .section-subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 600px;
+            letter-spacing: 0.5px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 35px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 0;
+            border: 1px solid var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: transparent;
+            color: var(--primary);
+        }
+
+        /* ==========================================
+           1. HOME SECTION (Immersive Hero Page)
+           ========================================== */
+        #home {
+            min-height: calc(100vh - 85px);
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+            max-width: 100%;
+            padding: 0;
+            color: white;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        #home h1 {
+            font-size: 64px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        #home h1 strong {
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        #home p {
+            font-size: 20px;
+            margin-bottom: 35px;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        #home .btn {
+            background-color: white;
+            color: var(--primary);
+            border-color: white;
+        }
+
+        #home .btn:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* ==========================================
+           2. ABOUT SECTION 
+           ========================================== */
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .about-img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            border-left: 8px solid var(--primary);
+        }
+
+        .about-text h3 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .about-text p {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        /* ==========================================
+           3. MARKETPLACE SECTION
+           ========================================== */
+        .marketplace-layout {
+            width: 100%;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            width: 100%;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.05);
+            overflow: hidden;
+            text-align: left;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.05);
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 380px;
+            background-color: #eee;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .tag-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary);
+            color: white;
+            padding: 5px 12px;
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* ==========================================
+           4. OUR IMPACT SECTION
+           ========================================== */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 40px 20px;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+        }
+
+        .metric-num {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .impact-statement {
+            max-width: 800px;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ==========================================
+           5. CONTACT SECTION
+           ========================================== */
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 60px;
+            width: 100%;
+            text-align: left;
+            background: white;
+            padding: 50px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .contact-info-panel {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contact-detail-item {
+            margin-bottom: 30px;
+        }
+
+        .contact-detail-item h4 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .contact-detail-item p {
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-form input, 
+        .contact-form textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            background: var(--bg-cream);
+            color: var(--text-dark);
+            font-size: 14px;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .contact-form input:focus, 
+        .contact-form textarea:focus {
+            border-color: var(--primary);
+            background: white;
+        }
+
+        .contact-form .btn {
+            width: 100%;
+        }
+
+        /* Footer Alignment */
+        footer {
+            background-color: var(--primary);
+            color: #a4bfa9;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsive UI Adjustments */
+        @media (max-width: 900px) {
+            .about-container, .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .contact-wrapper { padding: 30px; }
+            #home h1 { font-size: 42px; }
+            nav { padding: 20px; }
+            .nav-links { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation containing internal hyperlinks -->
+    <header>
+        <nav>
+            <a href="#home" class="logo" onclick="navigateTo(event, 'home')">Aura.</a>
+            <ul class="nav-links">
+                <li id="nav-home" class="active"><a href="#home" onclick="navigateTo(event, 'home')">Home</a></li>
+                <li id="nav-about"><a href="#about" onclick="navigateTo(event, 'about')">About</a></li>
+                <li id="nav-marketplace"><a href="#marketplace" onclick="navigateTo(event, 'marketplace')">Marketplace</a></li>
+                <li id="nav-sustainability"><a href="#sustainability" onclick="navigateTo(event, 'sustainability')">Our Impact</a></li>
+                <li id="nav-contact"><a href="#contact" onclick="navigateTo(event, 'contact')">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Dynamic Window Container -->
+    <main>
+
+        <!-- SECTION 1: HOME -->
+        <section id="home" class="active">
+            <div class="hero-content">
+                <h1>Elegance shouldn't cost the <strong>Earth</strong></h1>
+                <p>Step into the future of curated luxury. Explore our circular collective of premium designers putting ethical manufacturing, eco-friendly textiles, and radical transparency first.</p>
+                <button class="btn" onclick="document.querySelector('#nav-marketplace a').click()">Explore The Collective</button>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ABOUT -->
+        <section id="about">
+            <h2 class="section-title">The Mindful Revolution</h2>
+            <p class="section-subtitle">We bridge the divide between high-end aesthetic value and absolute environmental integrity.</p>
+            
+            <div class="about-container">
+                <img src="https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=80" alt="Sustainable Workshop" class="about-img">
+                <div class="about-text">
+                    <h3>Crafted for Longevity, Vetted for Peace of Mind.</h3>
+                    <p>Aura was built out of a response to the planetary demands brought on by fast-fashion. We operate strictly as an uncompromising luxury marketplace prioritizing designers that utilize low-impact dyes, organic agriculture, and fair-wage studios.</p>
+                    <p>Every garment arriving at your doorstep features a verifiable lifecycle report, tracking everything from raw fiber harvest to zero-waste tailoring. Your style evolution no longer requires carbon compromises.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: MARKETPLACE -->
+        <section id="marketplace">
+            <h2 class="section-title">The Marketplace Collective</h2>
+            <p class="section-subtitle">Consciously constructed premium pieces engineered to exist outside transient trend cycles.</p>
+            
+            <div class="marketplace-layout">
+                <div class="product-grid">
+                    <!-- Product 1 -->
+                    <div class="product-card">
+                        <div class="product-img-wrapper">
+                            <span class="tag-badge">Organic Linen</span>
+                            <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=80" alt="Linen Trench">
+                        </div>
+                        <div class="product-info">
+                            <span style="font-size: 11px; text-transform: uppercase; color: var(--accent); font-weight:700;">Studio Studio</span>
+                            <div class="product-meta">
+                                <span class="product-title">Raw Edged Linen Trench</span>
+                                <span class="product-price">$245</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product 2 -->
+                    <div class="product-card">
+                        <div class="product-img-wrapper">
+                            <span class="tag-badge">Upcycled Wool</span>
+                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=500&q=80" alt="Knit Sweater">
+                        </div>
+                        <div class="product-info">
+                            <span style="font-size: 11px; text-transform: uppercase; color: var(--accent); font-weight:700;">Atelier Zero</span>
+                            <div class="product-meta">
+                                <span class="product-title">Architectural Knit Sweater</span>
+                                <span class="product-price">$185</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product 3 -->
+                    <div class="product-card">
+                        <div class="product-img-wrapper">
+                            <span class="tag-badge">Plant Leather</span>
+                            <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=500&q=80" alt="Desserto Boots">
+                        </div>
+                        <div class="product-info">
+                            <span style="font-size: 11px; text-transform: uppercase; color: var(--accent); font-weight:700;">Terra Footwear</span>
+                            <div class="product-meta">
+                                <span class="product-title">Cactus Leather Minimalist Boot</span>
+                                <span class="product-price">$310</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: OUR IMPACT -->
+        <section id="sustainability">
+            <h2 class="section-title">Quantified Systemic Impact</h2>
+            <p class="section-subtitle">Sustainability isn't a vague catchphrase. We map our ecosystem's micro-metrics intentionally.</p>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-num">14.2M</div>
+                    <div class="metric-label">Liters Water Conserved</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-num">100%</div>
+                    <div class="metric-label">Fair Wage Certified Labs</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-num">0%</div>
+                    <div class="metric-label">Virgin Plastic Polyesters</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-num">36k+</div>
+                    <div class="metric-label">Tons Textile Waste Diverted</div>
+                </div>
+            </div>
+            
+            <div class="impact-statement">
+                "By refusing to work with factories that process raw material using traditional heavy fossil energy grids, Aura offsets substantial manufacturing emissions. Our goals ensure complete textile lifecycle circulation by the turn of the decade."
+            </div>
+        </section>
+
+        <!-- SECTION 5: CONTACT -->
+        <section id="contact">
+            <h2 class="section-title">Join The Circular Ecosystem</h2>
+            <p class="section-subtitle">Are you an independent ethical brand, designer, or creator looking to list with us?</p>
+            
+            <div class="contact-wrapper">
+                <div class="contact-info-panel">
+                    <div>
+                        <div class="contact-detail-item">
+                            <h4>Design Partnership Inquiries</h4>
+                            <p>curator@auramarket.eco</p>
+                        </div>
+                        <div class="contact-detail-item">
+                            <h4>General Relations</h4>
+                            <p>hello@auramarket.eco</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail-item" style="margin-bottom: 0;">
+                        <h4>HQ Bureau</h4>
+                        <p>74 Eco-District Blvd, Suite 400<br>Metropolis Innovation Center</p>
+                    </div>
+                </div>
+                
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('Application Received. Our curation bureau will review your brand details within 48 hours.');">
+                    <div class="form-group">
+                        <label>Brand / Creator Name</label>
+                        <input type="text" placeholder="e.g., Atelier Green" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Corporate Email</label>
+                        <input type="email" placeholder="you@brand.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Primary Material Focus & Supply Footprint</label>
+                        <textarea rows="4" placeholder="Briefly specify your organic certifications, regional production hubs, or materials used..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn">Submit Portfolio for Vetting</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 AURA Inc. Engineered with Absolute Transparency.</p>
+    </footer>
+
+    <!-- Single Page Application Logic Intercepting Hyperlinks -->
+    <script>
+        function navigateTo(event, sectionId) {
+            // Prevent regular scroll defaults
+            event.preventDefault();
+
+            // 1. Hide all sections completely from view layout
+            const sections = document.querySelectorAll('main section');
+            sections.forEach(sec => {
+                sec.classList.remove('active');
+                sec.style.display = 'none'; // Closes space entirely
+            });
+
+            // 2. Select the targeted section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'flex'; // Instantly makes section part of document layout
+                
+                // Allow layout to recognize style engine toggles for transitions
+                setTimeout(() => {
+                    targetSection.classList.add('active');
+                }, 50);
+            }
+
+            // 3. Keep Navigation indicators accurate
+            const navItems = document.querySelectorAll('.nav-links li');
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            const selectedNavItem = document.getElementById(`nav-${sectionId}`);
+            if (selectedNavItem) {
+                selectedNavItem.classList.add('active');
+            }
+
+            // Window jumps gracefully back up to prevent inheriting offset scrolls
+            window.scrollTo({ top: 0 });
+        }
+    </script>
+</body>
+</html>
