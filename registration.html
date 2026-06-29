@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Registration – Sustainable Fashion</title>
+  <style>
+    /* ── Reset & Base ── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    /* ── Page Header ── */
+    .page-header {
+      background: #1a1a2e;
+      color: #fff;
+      text-align: center;
+      padding: 18px 20px;
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+    .page-header h1 { font-size: 1.5rem; letter-spacing: 1px; }
+    .page-header p  { font-size: 0.85rem; color: #aaa; margin-top: 4px; }
+
+    /* ── Form Card ── */
+    .form-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 700px;
+      margin: 0 auto 30px auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    .form-card h2 {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #1a1a2e;
+      color: #1a1a2e;
+    }
+
+    /* ── Form Grid ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group { display: flex; flex-direction: column; }
+    .form-group.full-width { grid-column: 1 / -1; }
+
+    label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #555;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    label span.req { color: #e74c3c; margin-left: 2px; }
+
+    input, select, textarea {
+      padding: 10px 12px;
+      border: 1.5px solid #ddd;
+      border-radius: 7px;
+      font-size: 0.9rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fafafa;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #1a1a2e;
+      box-shadow: 0 0 0 3px rgba(26,26,46,0.1);
+      background: #fff;
+    }
+    input.error, select.error { border-color: #e74c3c; }
+
+    .error-msg {
+      font-size: 0.75rem;
+      color: #e74c3c;
+      margin-top: 4px;
+      min-height: 16px;
+    }
+
+    /* ── Radio / Checkbox Group ── */
+    .radio-group, .checkbox-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+    .radio-group label, .checkbox-group label {
+      font-size: 0.88rem;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      color: #333;
+    }
+    .radio-group input, .checkbox-group input {
+      width: auto;
+      accent-color: #1a1a2e;
+    }
+
+    /* ── File Upload ── */
+    .file-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .file-label input[type="file"] { display: none; }
+    .file-btn {
+      padding: 8px 14px;
+      background: #1a1a2e;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    #fileName { font-size: 0.82rem; color: #666; }
+
+    /* ── Range Slider ── */
+    input[type="range"] {
+      padding: 0;
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      accent-color: #1a1a2e;
+    }
+    #rangeVal {
+      font-weight: 700;
+      color: #1a1a2e;
+      font-size: 0.9rem;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 11px 28px;
+      border: none;
+      border-radius: 7px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .btn-primary { background: #1a1a2e; color: #fff; }
+    .btn-secondary { background: #eee; color: #333; }
+
+    /* ── Result Card ── */
+    .result-card {
+      display: none;
+      background: #fff;
+      border-radius: 12px;
+      max-width: 700px;
+      margin: 0 auto 30px auto;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      overflow: hidden;
+      animation: slideIn 0.4s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .result-header {
+      background: #1a1a2e;
+      color: #fff;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .result-header .avatar {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem;
+      color: #1a1a2e;
+    }
+    .result-header h3 { font-size: 1.1rem; }
+    .result-header p  { font-size: 0.8rem; color: #aaa; }
+
+    .result-body { padding: 20px 24px; }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .result-field {
+      background: #f7f9fb;
+      border-radius: 7px;
+      padding: 10px 14px;
+    }
+    .result-field .rf-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #888;
+      margin-bottom: 3px;
+    }
+    .result-field .rf-value {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1a1a2e;
+      word-break: break-all;
+    }
+    .result-field.full { grid-column: 1 / -1; }
+
+    .badge {
+      display: inline-block;
+      background: #1a1a2e;
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin: 2px;
+    }
+
+    .storage-note {
+      font-size: 0.75rem;
+      color: #27ae60;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .form-grid, .result-grid { grid-template-columns: 1fr; }
+      .form-group.full-width { grid-column: 1; }
+      .result-field.full { grid-column: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <h1>🌿 Sustainable Fashion Management System</h1>
+    <p>User Registration Portal</p>
+  </div>
+
+  <!-- ── REGISTRATION FORM ── -->
+  <div class="form-card">
+    <h2>📋 Registration Form</h2>
+    <div class="form-grid">
+
+      <!-- Full Name -->
+      <div class="form-group">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="fullName" placeholder="e.g. Gayathri V.S" />
+        <span class="error-msg" id="err-fullName"></span>
+      </div>
+
+      <!-- Username -->
+      <div class="form-group">
+        <label>Username <span class="req">*</span></label>
+        <input type="text" id="username" placeholder="e.g. gayathri_vs" />
+        <span class="error-msg" id="err-username"></span>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label>Email Address <span class="req">*</span></label>
+        <input type="email" id="email" placeholder="you@example.com" />
+        <span class="error-msg" id="err-email"></span>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label>Phone Number <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="10-digit number" maxlength="10" />
+        <span class="error-msg" id="err-phone"></span>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label>Password <span class="req">*</span></label>
+        <input type="password" id="password" placeholder="Min 8 characters" />
+        <span class="error-msg" id="err-password"></span>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label>Confirm Password <span class="req">*</span></label>
+        <input type="password" id="confirmPwd" placeholder="Re-enter password" />
+        <span class="error-msg" id="err-confirmPwd"></span>
+      </div>
+
+      <!-- Date of Birth (Calendar) -->
+      <div class="form-group">
+        <label>Date of Birth <span class="req">*</span></label>
+        <input type="date" id="dob" />
+        <span class="error-msg" id="err-dob"></span>
+      </div>
+
+      <!-- Gender (Radio) -->
+      <div class="form-group">
+        <label>Gender <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="gender" value="Female" /> Female</label>
+          <label><input type="radio" name="gender" value="Male" /> Male</label>
+          <label><input type="radio" name="gender" value="Other" /> Other</label>
+        </div>
+        <span class="error-msg" id="err-gender"></span>
+      </div>
+
+      <!-- Country Dropdown -->
+      <div class="form-group">
+        <label>Country <span class="req">*</span></label>
+        <select id="country">
+          <option value="">-- Select Country --</option>
+          <option value="India">India</option>
+          <option value="USA">USA</option>
+          <option value="UK">UK</option>
+          <option value="Australia">Australia</option>
+          <option value="Canada">Canada</option>
+        </select>
+        <span class="error-msg" id="err-country"></span>
+      </div>
+
+      <!-- Role Dropdown -->
+      <div class="form-group">
+        <label>Role <span class="req">*</span></label>
+        <select id="role">
+          <option value="">-- Select Role --</option>
+          <option value="Customer">Customer</option>
+          <option value="Supplier">Supplier</option>
+          <option value="Admin">Admin</option>
+        </select>
+        <span class="error-msg" id="err-role"></span>
+      </div>
+
+      <!-- Profile Photo (File Upload) -->
+      <div class="form-group">
+        <label>Profile Photo</label>
+        <label class="file-label">
+          <span class="file-btn">📁 Choose File</span>
+          <input type="file" id="profilePhoto" accept="image/*" />
+          <span id="fileName">No file chosen</span>
+        </label>
+      </div>
+
+      <!-- Sustainability Score (Range) -->
+      <div class="form-group">
+        <label>Sustainability Interest: <span id="rangeVal">5</span>/10</label>
+        <input type="range" id="sustScore" min="1" max="10" value="5" />
+      </div>
+
+      <!-- Bio (Textarea) -->
+      <div class="form-group full-width">
+        <label>Short Bio</label>
+        <textarea id="bio" rows="3" placeholder="Tell us a little about yourself..."></textarea>
+      </div>
+
+      <!-- Interests (Checkboxes) -->
+      <div class="form-group full-width">
+        <label>Fashion Interests</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" value="Organic Fabrics" /> Organic Fabrics</label>
+          <label><input type="checkbox" value="Recycled Materials" /> Recycled Materials</label>
+          <label><input type="checkbox" value="Upcycling" /> Upcycling</label>
+          <label><input type="checkbox" value="Vegan Fashion" /> Vegan Fashion</label>
+          <label><input type="checkbox" value="Slow Fashion" /> Slow Fashion</label>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="form-group full-width">
+        <label style="text-transform:none; letter-spacing:0; font-size:0.88rem; flex-direction:row; align-items:center; gap:8px; display:flex; font-weight:500;">
+          <input type="checkbox" id="terms" style="width:auto;" />
+          I agree to the Terms and Conditions <span class="req">*</span>
+        </label>
+        <span class="error-msg" id="err-terms"></span>
+      </div>
+
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="handleRegister()">Register →</button>
+      <button class="btn btn-secondary" onclick="handleReset()">Reset</button>
+    </div>
+  </div>
+
+  <!-- ── RESULT CARD ── -->
+  <div class="result-card" id="resultCard">
+    <div class="result-header">
+      <div class="avatar" id="avatarIcon">👤</div>
+      <div>
+        <h3 id="cardName">Name</h3>
+        <p id="cardRole">Role</p>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="result-grid" id="resultGrid"></div>
+      <p class="storage-note" id="storageNote"></p>
+    </div>
+  </div>
+
+  <script>
+    // ── Range slider live update (arrow function) ──
+    const sustSlider = document.getElementById('sustScore');
+    sustSlider.addEventListener('input', () => {
+      document.getElementById('rangeVal').textContent = sustSlider.value;
+    });
+
+    // ── File name display (arrow function) ──
+    document.getElementById('profilePhoto').addEventListener('change', (e) => {
+      const name = e.target.files[0] ? e.target.files[0].name : 'No file chosen';
+      document.getElementById('fileName').textContent = name;
+    });
+
+    // ── Validation helper (arrow function) ──
+    const showError = (id, msg) => {
+      document.getElementById('err-' + id).textContent = msg;
+      if (document.getElementById(id)) {
+        document.getElementById(id).classList.toggle('error', msg !== '');
+      }
+    };
+
+    const clearError = (id) => showError(id, '');
+
+    // ── Main Validation (arrow function) ──
+    const validate = () => {
+      let valid = true;
+
+      const name = document.getElementById('fullName').value.trim();
+      if (!name) { showError('fullName', 'Full name is required.'); valid = false; }
+      else if (name.length < 3) { showError('fullName', 'Name must be at least 3 characters.'); valid = false; }
+      else clearError('fullName');
+
+      const uname = document.getElementById('username').value.trim();
+      if (!uname) { showError('username', 'Username is required.'); valid = false; }
+      else if (!/^[a-z0-9_]{3,}$/.test(uname)) { showError('username', 'Lowercase letters, numbers, _ only (min 3).'); valid = false; }
+      else clearError('username');
+
+      const email = document.getElementById('email').value.trim();
+      if (!email) { showError('email', 'Email is required.'); valid = false; }
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('email', 'Enter a valid email address.'); valid = false; }
+      else clearError('email');
+
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone) { showError('phone', 'Phone number is required.'); valid = false; }
+      else if (!/^\d{10}$/.test(phone)) { showError('phone', 'Enter a valid 10-digit number.'); valid = false; }
+      else clearError('phone');
+
+      const pwd = document.getElementById('password').value;
+      if (!pwd) { showError('password', 'Password is required.'); valid = false; }
+      else if (pwd.length < 8) { showError('password', 'Password must be at least 8 characters.'); valid = false; }
+      else clearError('password');
+
+      const cpwd = document.getElementById('confirmPwd').value;
+      if (!cpwd) { showError('confirmPwd', 'Please confirm your password.'); valid = false; }
+      else if (cpwd !== pwd) { showError('confirmPwd', 'Passwords do not match.'); valid = false; }
+      else clearError('confirmPwd');
+
+      const dob = document.getElementById('dob').value;
+      if (!dob) { showError('dob', 'Date of birth is required.'); valid = false; }
+      else clearError('dob');
+
+      const gender = document.querySelector('input[name="gender"]:checked');
+      if (!gender) { showError('gender', 'Please select your gender.'); valid = false; }
+      else clearError('gender');
+
+      const country = document.getElementById('country').value;
+      if (!country) { showError('country', 'Please select a country.'); valid = false; }
+      else clearError('country');
+
+      const role = document.getElementById('role').value;
+      if (!role) { showError('role', 'Please select a role.'); valid = false; }
+      else clearError('role');
+
+      const terms = document.getElementById('terms').checked;
+      if (!terms) { showError('terms', 'You must agree to the terms.'); valid = false; }
+      else clearError('terms');
+
+      return valid;
+    };
+
+    // ── Collect form data (arrow function) ──
+    const collectData = () => {
+      const interests = [...document.querySelectorAll('.checkbox-group input:checked')]
+                          .map(cb => cb.value);
+      const photoFile = document.getElementById('profilePhoto').files[0];
+
+      return {
+        fullName:   document.getElementById('fullName').value.trim(),
+        username:   document.getElementById('username').value.trim(),
+        email:      document.getElementById('email').value.trim(),
+        phone:      document.getElementById('phone').value.trim(),
+        dob:        document.getElementById('dob').value,
+        gender:     document.querySelector('input[name="gender"]:checked').value,
+        country:    document.getElementById('country').value,
+        role:       document.getElementById('role').value,
+        sustScore:  document.getElementById('sustScore').value,
+        bio:        document.getElementById('bio').value.trim() || '—',
+        interests:  interests.length ? interests : ['None selected'],
+        photo:      photoFile ? photoFile.name : 'Not uploaded',
+      };
+    };
+
+    // ── Render result card (arrow function) ──
+    const renderCard = (data) => {
+      document.getElementById('cardName').textContent = data.fullName;
+      document.getElementById('cardRole').textContent = data.role + ' · ' + data.country;
+
+      const fields = [
+        { label: 'Username',     value: '@' + data.username },
+        { label: 'Email',        value: data.email },
+        { label: 'Phone',        value: data.phone },
+        { label: 'Date of Birth',value: data.dob },
+        { label: 'Gender',       value: data.gender },
+        { label: 'Country',      value: data.country },
+        { label: 'Role',         value: data.role },
+        { label: 'Sustainability Interest', value: data.sustScore + ' / 10' },
+        { label: 'Profile Photo',value: data.photo },
+        { label: 'Bio',          value: data.bio, full: true },
+        { label: 'Fashion Interests', value: data.interests, isBadges: true, full: true },
+      ];
+
+      const grid = document.getElementById('resultGrid');
+      grid.innerHTML = fields.map(f => `
+        <div class="result-field ${f.full ? 'full' : ''}">
+          <div class="rf-label">${f.label}</div>
+          <div class="rf-value">
+            ${f.isBadges
+              ? f.value.map(v => `<span class="badge">${v}</span>`).join('')
+              : f.value}
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('resultCard').style.display = 'block';
+      document.getElementById('resultCard').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // ── Save to Local Storage (arrow function) ──
+    const saveToStorage = (data) => {
+      const all = JSON.parse(localStorage.getItem('registrations') || '[]');
+      all.push({ ...data, registeredAt: new Date().toLocaleString() });
+      localStorage.setItem('registrations', JSON.stringify(all));
+      document.getElementById('storageNote').textContent =
+        `✅ Data saved to Local Storage. Total registrations stored: ${all.length}`;
+    };
+
+    // ── Button Click: Register (arrow function) ──
+    const handleRegister = () => {
+      if (!validate()) return;
+      const data = collectData();
+      renderCard(data);
+      saveToStorage(data);
+    };
+
+    // ── Button Click: Reset (arrow function) ──
+    const handleReset = () => {
+      document.querySelectorAll('input:not([type=radio]):not([type=checkbox]), select, textarea')
+        .forEach(el => el.value = '');
+      document.querySelectorAll('input[type=radio], input[type=checkbox]')
+        .forEach(el => el.checked = false);
+      document.getElementById('rangeVal').textContent = '5';
+      document.getElementById('sustScore').value = 5;
+      document.getElementById('fileName').textContent = 'No file chosen';
+      document.getElementById('resultCard').style.display = 'none';
+      ['fullName','username','email','phone','password','confirmPwd','dob','gender','country','role','terms']
+        .forEach(id => showError(id, ''));
+    };
+  </script>
+</body>
+</html>
