@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sustainable Fashion Manager</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>🌱 Sustainable Fashion Manager</h1>
+        <p>Manage sustainable fashion products</p>
+    </header>
+
+    <main>
+
+        <p id="status" class="status"></p>
+
+        <!-- Create / Append Product (shared inputs) -->
+        <section>
+            <h2>Add a Product</h2>
+            <p class="hint">Fill in the fields, then choose whether to start a fresh file or add to the existing one.</p>
+
+            <input type="text" id="productName" placeholder="Product name">
+
+            <input type="text" id="material" placeholder="Material">
+
+            <input type="text" id="score" placeholder="Sustainability score (e.g. 8/10)">
+
+            <div class="button-row">
+                <button id="createBtn" title="Overwrites products.txt with just this product">Create (Write)</button>
+                <button id="appendBtn" title="Adds this product to the existing file">Add to List (Append)</button>
+            </div>
+        </section>
+
+
+        <!-- View Products -->
+        <section>
+            <h2>Products</h2>
+
+            <button id="viewBtn">View Products (Read)</button>
+
+            <pre id="products"></pre>
+        </section>
+
+
+        <!-- Delete -->
+        <section>
+            <h2>Delete Product File</h2>
+
+            <button id="deleteBtn" class="danger">Delete Products (Unlink)</button>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+:root {
+    --moss: #3f6b4f;
+    --moss-dark: #2c4d38;
+    --clay: #b5651d;
+    --cream: #f7f4ee;
+    --ink: #26312a;
+    --line: #dcd6c8;
+    --danger: #a13d2c;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.5;
+}
+
+header {
+    background: var(--moss-dark);
+    color: var(--cream);
+    padding: 2rem 1.5rem;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.75rem;
+}
+
+header p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1.5rem;
+}
+
+section {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+section h2 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: var(--moss-dark);
+}
+
+.hint {
+    margin-top: -0.5rem;
+    font-size: 0.85rem;
+    color: #6b6b6b;
+}
+
+input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+input[type="text"]:focus {
+    outline: 2px solid var(--moss);
+    outline-offset: 1px;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    background: var(--moss);
+    color: white;
+    transition: background 0.15s ease;
+}
+
+button:hover {
+    background: var(--moss-dark);
+}
+
+button.danger {
+    background: var(--danger);
+}
+
+button.danger:hover {
+    background: #7d2c1f;
+}
+
+.button-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+pre#products {
+    background: var(--cream);
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 0.75rem;
+    min-height: 2rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.status {
+    min-height: 1.4rem;
+    padding: 0 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status.success {
+    color: var(--moss-dark);
+}
+
+.status.error {
+    color: var(--danger);
+}
