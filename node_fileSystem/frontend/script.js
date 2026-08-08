@@ -1,6 +1,4 @@
-// Using a relative base URL because the backend now serves this page itself
-// (see app.use(express.static(...)) in server.js), so frontend and API share
-// an origin and there's nothing to hardcode or fight CORS over.
+
 const API_BASE = '';
 
 const productNameInput = document.getElementById('productName');
@@ -48,7 +46,7 @@ async function loadProducts() {
     }
 }
 
-// WRITE: creates/overwrites products.txt with a single product
+
 createBtn.addEventListener('click', async () => {
     const product = getProductInput();
     if (hasEmptyField(product)) {
@@ -73,7 +71,7 @@ createBtn.addEventListener('click', async () => {
     }
 });
 
-// APPEND: adds another product onto the existing file
+
 appendBtn.addEventListener('click', async () => {
     const product = getProductInput();
     if (hasEmptyField(product)) {
@@ -98,10 +96,10 @@ appendBtn.addEventListener('click', async () => {
     }
 });
 
-// READ: shows the current contents of products.txt
+
 viewBtn.addEventListener('click', loadProducts);
 
-// UNLINK: deletes products.txt entirely
+
 deleteBtn.addEventListener('click', async () => {
     try {
         const response = await fetch(`${API_BASE}/products`, { method: 'DELETE' });
